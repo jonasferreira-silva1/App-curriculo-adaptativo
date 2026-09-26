@@ -5,6 +5,7 @@
 [![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Vitest](https://img.shields.io/badge/Vitest-3-6E9F18?logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker&logoColor=white)](docker-compose.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 > Aplicação web 100% client-side que analisa descrições de vagas de tecnologia, extrai termos técnicos e reordena/destaca automaticamente as seções do currículo estruturado com base em um algoritmo determinístico de NLP (Natural Language Processing). Inclui importação automática de arquivos PDF/DOCX 100% no navegador.
@@ -224,16 +225,17 @@ Converte currículos em PDF ou DOCX em texto estruturado sem enviar arquivos par
 
 ## 7. Como Rodar o Projeto
 
-### Pré-requisitos
+### Opção A: Execução Local (Node.js)
+
+#### Pré-requisitos
 - **Node.js**: `^18.0.0` ou superior
 - **npm** ou **pnpm** / **yarn**
 
-### Passo a Passo
-
+#### Passo a Passo
 1. **Clonar o repositório:**
    ```bash
-   git clone https://github.com/seu-usuario/app-curriculo-adaptativo.git
-   cd app-curriculo-adaptativo
+   git clone https://github.com/jonasferreira-silva1/App-curriculo-adaptativo.git
+   cd App-curriculo-adaptativo
    ```
 
 2. **Instalar as dependências:**
@@ -241,7 +243,7 @@ Converte currículos em PDF ou DOCX em texto estruturado sem enviar arquivos par
    npm install
    ```
 
-3. **Executar o ambiente de desenvolvimento:**
+3. **Executar em modo de desenvolvimento:**
    ```bash
    npm run dev
    ```
@@ -254,6 +256,32 @@ Converte currículos em PDF ou DOCX em texto estruturado sem enviar arquivos par
 5. **Gerar a build de produção:**
    ```bash
    npm run build
+   ```
+
+---
+
+### Opção B: Execução via Docker Compose (Produção / Nginx)
+
+Você pode subir toda a aplicação empacotada em um container Nginx com um único comando sem precisar instalar o Node.js localmente.
+
+#### Pré-requisitos
+- **Docker** e **Docker Compose** instalados.
+
+#### Passo a Passo
+1. **Subir o container da aplicação:**
+   ```bash
+   docker compose up -d --build
+   ```
+
+2. **Acessar a aplicação no navegador:**
+   Abra no seu navegador o endereço: [http://localhost:3000](http://localhost:3000)
+
+3. **Nome do Container gerado:**
+   O container rodará com o nome amigável **`curriculo-adaptativo-app`**.
+
+4. **Parar e remover os containers:**
+   ```bash
+   docker compose down
    ```
 
 ---

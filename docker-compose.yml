@@ -1,0 +1,14 @@
+name: curriculo-adaptativo
+
+services:
+  # Serviço principal da aplicação web
+  app:
+    container_name: curriculo-adaptativo-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80" # Mapeia a porta 3000 da máquina hospedeira para a porta 80 do container
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
