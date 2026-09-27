@@ -14,11 +14,12 @@ export const STOPWORDS = new Set<string>([
   'quando', 'onde', 'qual', 'quais', 'quem', 'cujo', 'cuja', 'tudo', 'nada',
 
   // Termos genéricos corporativos comuns em anúncios de emprego
-  'vaga', 'empresa', 'trabalhar', 'busca', 'buscamos', 'equipe', 'time', 'grupo',
-  'requisitos', 'requisito', 'diferencial', 'diferenciais', 'experiencia',
-  'atividades', 'responsabilidades', 'conhecimento', 'conhecimentos', 'area',
-  'atuacao', 'desejavel', 'obrigatorio', 'necessario', 'perfil', 'candidato',
-  'candidatos', 'oportunidade', 'descricao', 'nivel', 'junior', 'pleno', 'senior',
-  'remoto', 'hibrido', 'presencial', 'local', 'beneficios', 'salario', 'contratacao',
-  'clt', 'pj', 'full', 'time', 'part', 'home', 'office', 'modelo', 'regime',
+  'vaga', 'vagas', 'empresa', 'empresas', 'trabalhar', 'busca', 'buscamos', 'procuramos',
+  'equipe', 'time', 'grupo', 'requisitos', 'requisito', 'diferencial', 'diferenciais',
+  'experiencia', 'experiencias', 'atividades', 'responsabilidades', 'conhecimento',
+  'conhecimentos', 'area', 'atuacao', 'desejavel', 'obrigatorio', 'necessario',
+  'perfil', 'candidato', 'candidatos', 'profissional', 'profissionais', 'oportunidade',
+  'descricao', 'nivel', 'junior', 'pleno', 'senior', 'remoto', 'hibrido', 'presencial',
+  'local', 'beneficios', 'salario', 'contratacao', 'clt', 'pj', 'full', 'time', 'part',
+  'home', 'office', 'modelo', 'regime', 'informacao', 'informacoes', 'vasta', 'excelentes',
 ]);
