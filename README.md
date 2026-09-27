@@ -156,6 +156,7 @@ export interface CurriculoBase {
     telefone?: string;
     linkedin?: string;
     github?: string;
+    localizacao?: string; // Cidade/Estado (ex: "São Paulo, SP — Remoto")
   };
   resumoProfissional: string;
   experiencias: ItemExperiencia[];

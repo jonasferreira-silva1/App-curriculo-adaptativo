@@ -526,7 +526,7 @@ export const FormularioCurriculo: React.FC<FormularioCurriculoProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {dadosLocais.habilidades.map((hab, index) => (
                 <div key={hab.id} className="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-2">
-                  <div className="flex-1">
+                  <div className="flex-1 space-y-1">
                     <input
                       type="text"
                       value={hab.nome}
@@ -535,14 +535,31 @@ export const FormularioCurriculo: React.FC<FormularioCurriculoProps> = ({
                         novas[index].nome = e.target.value;
                         atualizarCurriculo({ ...dadosLocais, habilidades: novas });
                       }}
-                      className="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs font-semibold text-white focus:outline-none focus:border-indigo-500"
+                      placeholder="Ex: React"
+                      className="w-full bg-slate-900 border border-slate-800 rounded px-2.5 py-1 text-xs font-semibold text-white focus:outline-none focus:border-indigo-500"
                     />
+                    <select
+                      value={hab.categoria}
+                      onChange={(e) => {
+                        const novas = [...dadosLocais.habilidades];
+                        novas[index].categoria = e.target.value as Habilidade['categoria'];
+                        atualizarCurriculo({ ...dadosLocais, habilidades: novas });
+                      }}
+                      className="w-full bg-slate-900 border border-slate-800 rounded px-2 py-0.5 text-[11px] text-slate-400 focus:outline-none focus:border-indigo-500 cursor-pointer"
+                    >
+                      <option value="linguagem">Linguagem</option>
+                      <option value="framework">Framework / Lib</option>
+                      <option value="banco-de-dados">Banco de Dados</option>
+                      <option value="ferramenta">Ferramenta / DevOps</option>
+                      <option value="outro">Outro</option>
+                    </select>
                   </div>
                   <button
                     onClick={() => removerHabilidade(hab.id)}
-                    className="text-slate-500 hover:text-rose-400 p-1"
+                    className="text-slate-500 hover:text-rose-400 p-1 shrink-0"
+                    title="Remover habilidade"
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
+                    <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
               ))}
