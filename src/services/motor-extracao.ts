@@ -1,6 +1,15 @@
 import { DICIONARIO_TECNICO } from '../data/dicionarioTecnico';
-import { STOPWORDS } from '../data/stopwords';
+import { STOPWORDS_GRAMATICAIS } from '../data/stopwords';
+import { RUIDO_DE_VAGA } from '../data/ruidoVaga';
 import type { PalavraChaveExtraida, EstatisticasVaga } from '../types/vaga';
+
+/**
+ * União de Stopwords Gramaticais e Ruído de Vaga para filtragem eficiente.
+ */
+export const STOPWORDS_COMBINADAS = new Set<string>([
+  ...STOPWORDS_GRAMATICAIS,
+  ...RUIDO_DE_VAGA,
+]);
 
 /**
  * Normaliza uma string convertendo para minúsculas e removendo caracteres acentuados.
@@ -39,8 +48,8 @@ export function tokenizarTexto(texto: string): string[] {
 /**
  * Motor de Extração de Palavras-Chave de Descrições de Vagas.
  * 
- * Realiza tokenização, filtragem de stopwords e cálculo de peso com bônus (3x)
- * para termos técnicos conhecidos.
+ * Realiza tokenização, filtragem de stopwords (gramaticais + ruído de vaga) e cálculo
+ * de peso com bônus (3x) para termos técnicos conhecidos.
  * 
  * @param descricaoVaga Texto completo da descrição da vaga colado pelo usuário
  * @returns Lista de palavras-chave ordenadas do maior para o menor peso
@@ -52,8 +61,8 @@ export function extrairPalavrasChave(descricaoVaga: string): PalavraChaveExtraid
 
   const tokens = tokenizarTexto(descricaoVaga);
 
-  // 1. Filtragem de Stopwords
-  const tokensFiltrados = tokens.filter((token) => !STOPWORDS.has(token));
+  // 1. Filtragem de Stopwords Gramaticais e Ruído de Vaga
+  const tokensFiltrados = tokens.filter((token) => !STOPWORDS_COMBINADAS.has(token));
 
   // 2. Contagem da frequência bruta de ocorrência de cada termo
   const mapaFrequencias = new Map<string, number>();
