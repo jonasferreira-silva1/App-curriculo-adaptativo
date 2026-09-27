@@ -3,20 +3,47 @@ import { useCurriculo } from './hooks/useCurriculo';
 import { Header } from './components/Header';
 import { FormularioCurriculo } from './components/FormularioCurriculo';
 import { ModalImportacao } from './components/ModalImportacao';
+import { FormularioVaga } from './components/FormularioVaga';
+import { PainelPalavrasChave } from './components/PainelPalavrasChave';
+import { extrairPalavrasChave, calcularEstatisticasVaga } from './services/motor-extracao';
 import type { CurriculoBase } from './types/curriculo';
-import { Sparkles, ShieldCheck, Cpu } from 'lucide-react';
+import type { DadosVaga } from './types/vaga';
+import { Sparkles, ShieldCheck, Cpu, FileCheck } from 'lucide-react';
 
 /**
- * Componente Raiz da Aplicação Currículo Adaptativo.
- * Coordena o estado do currículo, modais e o formulário principal.
+ * Componente Raiz da Aplicação Currículo Adaptativo (Sprint 1 & Sprint 2).
+ * Gerencia a base do currículo e a análise de palavras-chave da vaga colada.
  */
 export function App() {
   const { curriculo, setCurriculo, restaurarPadrao } = useCurriculo();
   const [modalImportacaoAberto, setModalImportacaoAberto] = useState(false);
 
-  // Manipulador para atualização do currículo a partir do formulário ou modal
+  // Estado da Vaga Analisada (Sprint 2)
+  const [vagaAnalisada, setVagaAnalisada] = useState<DadosVaga | null>(null);
+
+  // Manipulador de salvamento do currículo base
   const handleSalvarCurriculo = (novoCurriculo: CurriculoBase) => {
     setCurriculo(novoCurriculo);
+  };
+
+  // Manipulador de análise de descrição de vaga (Sprint 2)
+  const handleAnalisarVaga = (descricao: string, linkVaga?: string, tituloVaga?: string) => {
+    const palavrasChave = extrairPalavrasChave(descricao);
+
+    const dadosVaga: DadosVaga = {
+      id: `vaga-${Date.now()}`,
+      tituloVaga,
+      descricao,
+      linkVaga,
+      palavrasChave,
+      dataAnalise: new Date().toISOString(),
+    };
+
+    setVagaAnalisada(dadosVaga);
+  };
+
+  const handleLimparVaga = () => {
+    setVagaAnalisada(null);
   };
 
   return (
@@ -32,7 +59,7 @@ export function App() {
       {/* Conteúdo Principal */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         
-        {/* Banner Informativo da Sprint 1 */}
+        {/* Banner Informativo */}
         <div className="bg-gradient-to-r from-indigo-900/40 via-purple-900/20 to-slate-900 border border-indigo-500/20 rounded-2xl p-6 shadow-xl relative overflow-hidden">
           <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -40,11 +67,11 @@ export function App() {
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-indigo-400" />
                 <h2 className="text-lg font-bold text-white font-heading">
-                  Base Unificada de Currículo
+                  Currículo Adaptativo — Sprint 2
                 </h2>
               </div>
               <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-                Cadastre ou importe seu histórico profissional uma única vez. Na Sprint 2, este currículo será cruzado automaticamente com descrições de vagas para reordenação inteligente de seções.
+                Cole a descrição de qualquer vaga para extrair instantaneamente os requisitos e tecnologias exigidas com peso técnico ponderado (3x).
               </p>
             </div>
 
@@ -55,17 +82,51 @@ export function App() {
               </span>
               <span className="flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
                 <Cpu className="h-4 w-4 text-indigo-400" />
-                NLP Determinístico
+                Motor NLP 3x
               </span>
             </div>
           </div>
         </div>
 
-        {/* Formulario Principal de Edição e Gestão do Currículo */}
-        <FormularioCurriculo
-          curriculo={curriculo}
-          onSalvar={handleSalvarCurriculo}
-        />
+        {/* SEÇÃO 1: Entrada da Vaga e Extração de Palavras-Chave (Sprint 2) */}
+        <section className="space-y-6">
+          <FormularioVaga
+            onAnalisarVaga={handleAnalisarVaga}
+            onLimparAnalise={handleLimparVaga}
+            temAnaliseAtiva={!!vagaAnalisada}
+          />
+
+          {/* Se houver análise ativa, exibe o Painel de Palavras-Chave */}
+          {vagaAnalisada && (
+            <PainelPalavrasChave
+              palavrasChave={vagaAnalisada.palavrasChave}
+              estatisticas={calcularEstatisticasVaga(
+                vagaAnalisada.descricao,
+                vagaAnalisada.palavrasChave
+              )}
+              tituloVaga={vagaAnalisada.tituloVaga}
+              linkVaga={vagaAnalisada.linkVaga}
+            />
+          )}
+        </section>
+
+        {/* SEÇÃO 2: Gestão do Currículo Base (Sprint 1) */}
+        <section className="space-y-4 pt-4 border-t border-slate-800/80">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-bold text-white flex items-center gap-2 font-heading">
+              <FileCheck className="h-5 w-5 text-indigo-400" />
+              Sua Base de Currículo Estruturada
+            </h2>
+            <span className="text-xs text-slate-400">
+              Dados salvos localmente
+            </span>
+          </div>
+
+          <FormularioCurriculo
+            curriculo={curriculo}
+            onSalvar={handleSalvarCurriculo}
+          />
+        </section>
       </main>
 
       {/* Rodapé da Aplicação */}

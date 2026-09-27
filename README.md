@@ -213,7 +213,7 @@ Converte currículos em PDF ou DOCX em texto estruturado sem enviar arquivos par
 | Sprint | Entrega Principal | Status |
 | :---: | :--- | :---: |
 | **Sprint 1** | Setup do Projeto + Modelo de Dados + Persistência Local (`useCurriculo`) + Importação Client-Side de PDF/DOCX | ✅ Concluído |
-| **Sprint 2** | Motor de Extração de Termos da Vaga (`motor-extracao.ts`) + Anotação de Link da Vaga (ADR-02) | ⏳ Planejado |
+| **Sprint 2** | Motor de Extração de Termos da Vaga (`motor-extracao.ts`) + Anotação de Link da Vaga (ADR-02) | ✅ Concluído |
 | **Sprint 3** | Algoritmo de Matching e Cálculo de Scores (`motor-matching.ts`) | ⏳ Planejado |
 | **Sprint 4** | Reordenação dinâmica e destaque visual de termos na UI | ⏳ Planejado |
 | **Sprint 5** | Tela de comparação entre múltiplas vagas simultâneas | ⏳ Planejado |
