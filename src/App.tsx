@@ -1,18 +1,22 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useCurriculo } from './hooks/useCurriculo';
 import { Header } from './components/Header';
 import { FormularioCurriculo } from './components/FormularioCurriculo';
 import { ModalImportacao } from './components/ModalImportacao';
 import { FormularioVaga } from './components/FormularioVaga';
 import { PainelPalavrasChave } from './components/PainelPalavrasChave';
+import { BadgeScoreGeral } from './components/BadgeScoreGeral';
 import { extrairPalavrasChave, calcularEstatisticasVaga } from './services/motor-extracao';
+import { calcularMatching } from './services/motor-matching';
 import type { CurriculoBase } from './types/curriculo';
 import type { DadosVaga } from './types/vaga';
+import type { ResultadoMatching } from './types/matching';
 import { Sparkles, ShieldCheck, Cpu, FileCheck } from 'lucide-react';
 
 /**
- * Componente Raiz da Aplicação Currículo Adaptativo (Sprint 1 & Sprint 2).
- * Gerencia a base do currículo e a análise de palavras-chave da vaga colada.
+ * Componente Raiz da Aplicação Currículo Adaptativo (Sprint 1, 2 e 3).
+ * Gerencia a base do currículo, a análise de palavras-chave da vaga
+ * e o cálculo do resultado de matching de aderência.
  */
 export function App() {
   const { curriculo, setCurriculo, restaurarPadrao } = useCurriculo();
@@ -26,8 +30,9 @@ export function App() {
     setCurriculo(novoCurriculo);
   };
 
-  // Manipulador de análise de descrição de vaga (Sprint 2)
+  // Manipulador de análise de descrição de vaga (Sprint 2 & 3)
   const handleAnalisarVaga = (descricao: string, linkVaga?: string, tituloVaga?: string) => {
+    // Extrai palavras-chave uma única vez (Sprint 2)
     const palavrasChave = extrairPalavrasChave(descricao);
 
     const dadosVaga: DadosVaga = {
@@ -45,6 +50,16 @@ export function App() {
   const handleLimparVaga = () => {
     setVagaAnalisada(null);
   };
+
+  // Cálculo reativo do Resultado de Matching (Sprint 3)
+  // Utiliza useMemo para recalcular instantaneamente se o currículo base ou a vaga mudar,
+  // sem precisar re-extrair as palavras-chave (desacoplamento limpo).
+  const resultadoMatching: ResultadoMatching | null = useMemo(() => {
+    if (!vagaAnalisada || vagaAnalisada.palavrasChave.length === 0) {
+      return null;
+    }
+    return calcularMatching(curriculo, vagaAnalisada.palavrasChave, vagaAnalisada.linkVaga);
+  }, [curriculo, vagaAnalisada]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col">
@@ -67,11 +82,11 @@ export function App() {
               <div className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-indigo-400" />
                 <h2 className="text-lg font-bold text-white font-heading">
-                  Currículo Adaptativo — Sprint 2
+                  Currículo Adaptativo — Sprint 3
                 </h2>
               </div>
               <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-                Cole a descrição de qualquer vaga para extrair instantaneamente os requisitos e tecnologias exigidas com peso técnico ponderado (3x).
+                Algoritmo determinístico de matching: cruzamento de tokens de vaga com histórico profissional e pontuação de aderência em tempo real.
               </p>
             </div>
 
@@ -82,13 +97,13 @@ export function App() {
               </span>
               <span className="flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800">
                 <Cpu className="h-4 w-4 text-indigo-400" />
-                Motor NLP 3x
+                Matching Determinístico
               </span>
             </div>
           </div>
         </div>
 
-        {/* SEÇÃO 1: Entrada da Vaga e Extração de Palavras-Chave (Sprint 2) */}
+        {/* SEÇÃO 1: Entrada da Vaga, Matching e Palavras-Chave (Sprints 2 e 3) */}
         <section className="space-y-6">
           <FormularioVaga
             onAnalisarVaga={handleAnalisarVaga}
@@ -96,7 +111,12 @@ export function App() {
             temAnaliseAtiva={!!vagaAnalisada}
           />
 
-          {/* Se houver análise ativa, exibe o Painel de Palavras-Chave */}
+          {/* Se houver resultado de matching, exibe o Badge de Semáforo (Sprint 3) */}
+          {resultadoMatching && (
+            <BadgeScoreGeral scoreGeral={resultadoMatching.scoreGeral} />
+          )}
+
+          {/* Se houver análise ativa, exibe o Painel de Palavras-Chave (Sprint 2) */}
           {vagaAnalisada && (
             <PainelPalavrasChave
               palavrasChave={vagaAnalisada.palavrasChave}
