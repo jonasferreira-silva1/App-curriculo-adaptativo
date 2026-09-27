@@ -12,8 +12,17 @@
 
 ---
 
+## 🎬 Demonstração Visual da Aplicação
+
+![Demonstração Interativa do Currículo Adaptativo](docs/assets/demonstracao.webp)
+
+> *Gravação da sessão de uso mostrando a edição do currículo base, importação client-side de arquivos, extração de palavras-chave com pesagem 3x e o score geral de aderência com semáforo.*
+
+---
+
 ## 📌 Sumário
 
+- [Demonstração Visual da Aplicação](#-demonstração-visual-da-aplicação)
 - [1. Visão Geral](#1-visão-geral)
   - [1.1 O Problema Real](#11-o-problema-real)
   - [1.2 A Solução Proposta](#12-a-solução-proposta)
